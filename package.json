@@ -1,0 +1,21 @@
+{
+  "name": "mxw01-print",
+  "private": true,
+  "version": "0.0.0",
+  "description": "MXW01 Thermal Printer - Web App, REST API & Documentation",
+  "scripts": {
+    "dev:ui": "npm run dev --prefix printer-ui",
+    "dev:api": "npm run dev --prefix printer-api",
+    "dev:docs": "npm run start --prefix printer-docs",
+    "build:ui": "npm run build --prefix printer-ui",
+    "build:api": "npm run build --prefix printer-api",
+    "build:docs": "npm run build --prefix printer-docs",
+    "dev:mcp": "npm run dev --prefix printer-mcp",
+    "build:mcp": "npm run build --prefix printer-mcp",
+    "install:ui": "npm install --prefix printer-ui",
+    "install:api": "npm install --prefix printer-api",
+    "install:docs": "npm install --prefix printer-docs",
+    "install:mcp": "npm install --prefix printer-mcp",
+    "install:all": "npm run install:ui && npm run install:api && npm run install:docs && npm run install:mcp"
+  }
+}

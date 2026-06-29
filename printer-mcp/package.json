@@ -1,0 +1,25 @@
+{
+  "name": "printer-mcp",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "bin": {
+    "printer-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@stoprocent/noble": "^1.19.1",
+    "mxw01-thermal-printer": "^0.1.0",
+    "sharp": "^0.34.5",
+    "tsx": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "typescript": "~5.6.2"
+  }
+}

@@ -1,0 +1,34 @@
+services:
+  printer-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9990:80"
+    restart: unless-stopped
+
+# ─── Notas de despliegue ─────────────────────────────────────────────────────
+#
+# Web Bluetooth API requiere contexto seguro (HTTPS) para URLs que no sean
+# localhost. Si accedes desde otra máquina en tu red, necesitas HTTPS.
+#
+# Opciones para habilitar HTTPS en el LXC:
+#
+# 1) Reverse proxy con Caddy (más sencillo, TLS automático):
+#    - Instala Caddy en el LXC: apt install caddy
+#    - Caddyfile: tu.dominio.local { reverse_proxy localhost:8080 }
+#
+# 2) Reverse proxy con nginx + certificado autofirmado:
+#    - Genera el cert: openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
+#        -keyout /etc/ssl/private/printer.key -out /etc/ssl/certs/printer.crt
+#    - Configura nginx como proxy hacia el puerto 8080
+#
+# 3) Flag de Chrome para HTTP en IPs locales (solo para pruebas):
+#    - Abre chrome://flags/#unsafely-treat-insecure-origin-as-secure
+#    - Añade http://<IP-del-LXC>:8080
+#
+# Comandos útiles:
+#   docker compose up -d          # Levantar en background
+#   docker compose down           # Detener
+#   docker compose logs -f        # Ver logs
+#   docker compose build --no-cache  # Reconstruir imagen

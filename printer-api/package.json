@@ -1,0 +1,33 @@
+{
+  "name": "printer-api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@mdi/js": "^7.4.47",
+    "@stoprocent/noble": "^1.19.1",
+    "bwip-js": "^4.8.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "flag-icons": "^7.5.0",
+    "multer": "^2.0.2",
+    "mxw01-print": "file:..",
+    "mxw01-thermal-printer": "^0.1.0",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.34.5",
+    "tsx": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^25.2.3",
+    "@types/qrcode": "^1.5.6",
+    "typescript": "~5.6.2"
+  }
+}

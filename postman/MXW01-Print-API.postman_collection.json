@@ -1,0 +1,571 @@
+{
+  "info": {
+    "name": "MXW01 Print API",
+    "description": "REST API for the MXW01 thermal printer. Supports printing and rendering text, QR codes, barcodes, Data Matrix codes, images, and Material Design Icons.\n\n## Getting Started\n\n1. Start the server: `npm run server`\n2. Set the `base_url` variable if not using the default `http://localhost:9990`\n3. Connect to the printer via **Printer > Connect**\n4. Use any Print or Render endpoint\n\nRender endpoints return PNG images and do not require a connected printer.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:9990",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Printer",
+      "description": "Manage the BLE connection to the MXW01 printer.",
+      "item": [
+        {
+          "name": "Get Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/printer/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "printer", "status"]
+            },
+            "description": "Returns the current printer connection state, printing status, and a human-readable status message."
+          }
+        },
+        {
+          "name": "Connect",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/printer/connect",
+              "host": ["{{base_url}}"],
+              "path": ["api", "printer", "connect"]
+            },
+            "description": "Initiates a BLE connection to the nearest MXW01 printer. Uses NodeBluetoothAdapter (requires system Bluetooth access)."
+          }
+        },
+        {
+          "name": "Disconnect",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/printer/disconnect",
+              "host": ["{{base_url}}"],
+              "path": ["api", "printer", "disconnect"]
+            },
+            "description": "Disconnects from the currently connected printer."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Print",
+      "description": "Render content and send it to the connected printer. The printer must be connected first.",
+      "item": [
+        {
+          "name": "Print Text",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Hello World!\",\n  \"fontSize\": 32,\n  \"fontFamily\": \"sans-serif\",\n  \"bold\": false,\n  \"italic\": false,\n  \"align\": \"left\",\n  \"lineHeight\": 1.4,\n  \"width\": 384,\n  \"dither\": \"steinberg\",\n  \"brightness\": 128,\n  \"intensity\": 93\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/text",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "text"]
+            },
+            "description": "Print formatted text.\n\n**Required:** `text`\n\n**Optional:** `fontSize` (24), `fontFamily` (sans-serif), `bold` (false), `italic` (false), `align` (left|center|right), `lineHeight` (1.4), `width` (384), `dither`, `brightness`, `intensity`"
+          }
+        },
+        {
+          "name": "Print QR - Text",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"text\",\n  \"content\": \"Hello World\",\n  \"size\": 384,\n  \"errorLevel\": \"M\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/qr",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "qr"]
+            },
+            "description": "Print a QR code with plain text content."
+          }
+        },
+        {
+          "name": "Print QR - URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"url\",\n  \"content\": \"https://example.com\",\n  \"size\": 384,\n  \"errorLevel\": \"M\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/qr",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "qr"]
+            },
+            "description": "Print a QR code encoding a URL."
+          }
+        },
+        {
+          "name": "Print QR - WiFi",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"wifi\",\n  \"wifiSsid\": \"MyNetwork\",\n  \"wifiPassword\": \"secret123\",\n  \"wifiEncryption\": \"WPA\",\n  \"wifiHidden\": false,\n  \"size\": 384,\n  \"errorLevel\": \"M\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/qr",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "qr"]
+            },
+            "description": "Print a WiFi QR code. Scanning connects to the network automatically.\n\n**Encryption:** `WPA`, `WEP`, or `nopass`"
+          }
+        },
+        {
+          "name": "Print QR - Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"email\",\n  \"emailAddress\": \"user@example.com\",\n  \"emailSubject\": \"Hello\",\n  \"emailBody\": \"This is the message body\",\n  \"size\": 384\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/qr",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "qr"]
+            },
+            "description": "Print a QR code that opens an email compose window when scanned."
+          }
+        },
+        {
+          "name": "Print QR - Phone",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"phone\",\n  \"phoneNumber\": \"+1234567890\",\n  \"size\": 384\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/qr",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "qr"]
+            },
+            "description": "Print a QR code that opens the phone dialer when scanned."
+          }
+        },
+        {
+          "name": "Print QR - SMS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"sms\",\n  \"phoneNumber\": \"+1234567890\",\n  \"smsBody\": \"Hello from QR!\",\n  \"size\": 384\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/qr",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "qr"]
+            },
+            "description": "Print a QR code that opens the SMS app with a pre-filled message."
+          }
+        },
+        {
+          "name": "Print QR - vCard",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"vcard\",\n  \"vcardName\": \"John Doe\",\n  \"vcardOrg\": \"Acme Corp\",\n  \"vcardPhone\": \"+1234567890\",\n  \"vcardEmail\": \"john@example.com\",\n  \"vcardUrl\": \"https://example.com\",\n  \"size\": 384\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/qr",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "qr"]
+            },
+            "description": "Print a QR code containing a vCard contact that can be saved to the phone's address book."
+          }
+        },
+        {
+          "name": "Print Barcode",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"format\": \"code128\",\n  \"content\": \"ABC-12345\",\n  \"scaleX\": 3,\n  \"scaleY\": 3,\n  \"height\": 15,\n  \"includeText\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/barcode",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "barcode"]
+            },
+            "description": "Print a 1D or 2D barcode.\n\n**Required:** `content`\n\n**Formats:** `code128`, `code39`, `code93`, `ean13`, `ean8`, `upca`, `upce`, `itf14`, `interleaved2of5`, `codabar`, `pdf417`"
+          }
+        },
+        {
+          "name": "Print Data Matrix",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"SN-2024-0001\",\n  \"scale\": 4,\n  \"rectangular\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/datamatrix",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "datamatrix"]
+            },
+            "description": "Print a Data Matrix 2D code.\n\n**Required:** `content`\n\n**Optional:** `scale` (4), `rectangular` (false)"
+          }
+        },
+        {
+          "name": "Print Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "",
+                  "description": "Image file (PNG, JPEG, etc.) up to 10 MB"
+                },
+                {
+                  "key": "width",
+                  "value": "384",
+                  "type": "text",
+                  "description": "Resize width in pixels"
+                },
+                {
+                  "key": "rotation",
+                  "value": "0",
+                  "type": "text",
+                  "description": "Rotation: 0, 90, 180, or 270"
+                },
+                {
+                  "key": "invert",
+                  "value": "false",
+                  "type": "text",
+                  "description": "Invert colors"
+                },
+                {
+                  "key": "dither",
+                  "value": "steinberg",
+                  "type": "text",
+                  "description": "Dithering method"
+                },
+                {
+                  "key": "brightness",
+                  "value": "128",
+                  "type": "text",
+                  "description": "Brightness (0-255)"
+                },
+                {
+                  "key": "intensity",
+                  "value": "93",
+                  "type": "text",
+                  "description": "Print intensity (0-255)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/image",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "image"]
+            },
+            "description": "Print an uploaded image. Select a file for the `image` field.\n\n**Required:** `image` (file)\n\n**Optional:** `width` (384), `rotation` (0|90|180|270), `invert` (false)"
+          }
+        },
+        {
+          "name": "Print Icons",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"icons\": [\"home\", \"lightbulb\", \"power-plug\", \"fan\", \"thermometer\", \"wifi\"],\n  \"size\": 48,\n  \"columns\": 3,\n  \"spacing\": 16\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/print/icon",
+              "host": ["{{base_url}}"],
+              "path": ["api", "print", "icon"]
+            },
+            "description": "Print Material Design Icons in a grid with cutting guides.\n\n**Required:** `icons` (array of icon names)\n\n**Optional:** `size` (32), `columns` (4), `spacing` (16)\n\nIcon names can be readable (e.g., `home`, `lightbulb`) or @mdi/js export names (e.g., `mdiHome`)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Render",
+      "description": "Render content as PNG images without printing. No printer connection required. Response is `image/png`.",
+      "item": [
+        {
+          "name": "Render Text",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Hello World!\",\n  \"fontSize\": 32,\n  \"fontFamily\": \"sans-serif\",\n  \"bold\": true,\n  \"align\": \"center\",\n  \"width\": 384\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/render/text",
+              "host": ["{{base_url}}"],
+              "path": ["api", "render", "text"]
+            },
+            "description": "Render formatted text as a PNG image."
+          }
+        },
+        {
+          "name": "Render QR - Text",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"text\",\n  \"content\": \"Hello World\",\n  \"size\": 384,\n  \"errorLevel\": \"M\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/render/qr",
+              "host": ["{{base_url}}"],
+              "path": ["api", "render", "qr"]
+            },
+            "description": "Render a QR code as a PNG image."
+          }
+        },
+        {
+          "name": "Render QR - WiFi",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"wifi\",\n  \"wifiSsid\": \"MyNetwork\",\n  \"wifiPassword\": \"secret123\",\n  \"wifiEncryption\": \"WPA\",\n  \"size\": 384\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/render/qr",
+              "host": ["{{base_url}}"],
+              "path": ["api", "render", "qr"]
+            },
+            "description": "Render a WiFi QR code as a PNG image."
+          }
+        },
+        {
+          "name": "Render QR - vCard",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"vcard\",\n  \"vcardName\": \"John Doe\",\n  \"vcardOrg\": \"Acme Corp\",\n  \"vcardPhone\": \"+1234567890\",\n  \"vcardEmail\": \"john@example.com\",\n  \"size\": 384\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/render/qr",
+              "host": ["{{base_url}}"],
+              "path": ["api", "render", "qr"]
+            },
+            "description": "Render a vCard QR code as a PNG image."
+          }
+        },
+        {
+          "name": "Render Barcode",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"format\": \"code128\",\n  \"content\": \"ABC-12345\",\n  \"scaleX\": 3,\n  \"scaleY\": 3,\n  \"height\": 15,\n  \"includeText\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/render/barcode",
+              "host": ["{{base_url}}"],
+              "path": ["api", "render", "barcode"]
+            },
+            "description": "Render a barcode as a PNG image."
+          }
+        },
+        {
+          "name": "Render Data Matrix",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"SN-2024-0001\",\n  \"scale\": 6,\n  \"rectangular\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/render/datamatrix",
+              "host": ["{{base_url}}"],
+              "path": ["api", "render", "datamatrix"]
+            },
+            "description": "Render a Data Matrix code as a PNG image."
+          }
+        },
+        {
+          "name": "Render Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "",
+                  "description": "Image file (PNG, JPEG, etc.)"
+                },
+                {
+                  "key": "width",
+                  "value": "384",
+                  "type": "text",
+                  "description": "Resize width in pixels"
+                },
+                {
+                  "key": "rotation",
+                  "value": "0",
+                  "type": "text",
+                  "description": "Rotation: 0, 90, 180, or 270"
+                },
+                {
+                  "key": "invert",
+                  "value": "false",
+                  "type": "text",
+                  "description": "Invert colors"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/render/image",
+              "host": ["{{base_url}}"],
+              "path": ["api", "render", "image"]
+            },
+            "description": "Process and render an uploaded image as PNG."
+          }
+        },
+        {
+          "name": "Render Icons",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"icons\": [\"home\", \"lightbulb\", \"power-plug\", \"fan\"],\n  \"size\": 64,\n  \"columns\": 2,\n  \"spacing\": 16\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/render/icon",
+              "host": ["{{base_url}}"],
+              "path": ["api", "render", "icon"]
+            },
+            "description": "Render Material Design Icons grid as a PNG image."
+          }
+        }
+      ]
+    }
+  ]
+}

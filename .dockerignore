@@ -1,0 +1,19 @@
+# Git
+.git
+.gitignore
+
+# Node modules (se instalan dentro del contenedor)
+node_modules
+printer-ui/node_modules
+printer-api/node_modules
+printer-docs/node_modules
+printer-mcp/node_modules
+
+# Build outputs previos
+printer-ui/dist
+
+# Subproyectos no necesarios para la imagen del UI
+printer-api/
+printer-docs/
+printer-mcp/
+postman/
