@@ -8,7 +8,6 @@ Web app and REST API for the MXW01 thermal printer. Supports printing text, imag
 mxw01-print/
 ├── printer-ui/       # React + Vite frontend
 ├── printer-api/      # Express REST API server
-├── printer-docs/     # Docusaurus documentation
 └── postman/          # Postman collection
 ```
 
@@ -21,7 +20,6 @@ npm run install:all
 # Or install individually
 npm run install:ui
 npm run install:api
-npm run install:docs
 ```
 
 ### Development
@@ -127,7 +125,6 @@ POST /api/printer/disconnect   # Disconnect
 | Codes | qrcode, bwip-js (100+ barcode symbologies) |
 | Icons | @mdi/js (7000+ Material Design Icons) |
 | Printer | mxw01-thermal-printer (Web Bluetooth / Node.js BLE) |
-| Docs | Docusaurus |
 
 ## License
 
