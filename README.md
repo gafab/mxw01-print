@@ -32,17 +32,12 @@ npm run dev:ui
 
 # API server — http://localhost:9990
 npm run dev:api
-
-# Documentation — http://localhost:3000
-npm run dev:docs
 ```
-
 ### Production Build
 
 ```bash
 npm run build:ui      # Builds to printer-ui/dist/
 npm run build:api     # TypeScript check
-npm run build:docs    # Builds to printer-docs/build/
 ```
 
 ## Print Modes
